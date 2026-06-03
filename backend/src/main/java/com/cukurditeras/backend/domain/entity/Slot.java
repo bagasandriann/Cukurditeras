@@ -14,9 +14,11 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -50,8 +52,9 @@ public class Slot {
     private LocalTime endTime;
 
     @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
     @Column(nullable = false, columnDefinition = "slot_status")
-    private SlotStatus status = SlotStatus.AVAILABLE;
+    private SlotStatus status = SlotStatus.CLOSED;
 
     @Column(columnDefinition = "text")
     private String notes;

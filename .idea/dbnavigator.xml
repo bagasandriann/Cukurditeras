@@ -13,7 +13,22 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="bd0e4fcd-1700-4a5d-ad76-8f292884fb80">
-      <console name="cukur_di_teras" type="STANDARD" schema="postgres" session="Main" />
+      <console name="cukur_di_teras" type="STANDARD" schema="postgres" session="Main"><![CDATA[INSERT INTO "public".capster (name, email, password_hash, phone_number)
+VALUES ('Bagas Barber', 'bagas@example.com', 'dummy-password', '081234567890');
+
+SELECT * FROM "public".capster
+
+INSERT INTO "public".slot (capster_id, date, start_time, end_time, status, notes)
+VALUES (
+    'de55c4d3-622b-4284-a535-389180ea03c8',
+    CURRENT_DATE,
+    '15:00',
+    '16:00',
+    'AVAILABLE',
+    'Slot testing pertama'
+);
+
+select * from "public".slot]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">

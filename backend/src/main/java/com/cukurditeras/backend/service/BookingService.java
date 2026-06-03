@@ -1,0 +1,65 @@
+package com.cukurditeras.backend.service;
+
+import com.cukurditeras.backend.domain.entity.Booking;
+import com.cukurditeras.backend.domain.entity.Slot;
+import com.cukurditeras.backend.domain.enums.BookingStatus;
+import com.cukurditeras.backend.domain.enums.SlotStatus;
+import com.cukurditeras.backend.repository.BookingRepository;
+import com.cukurditeras.backend.repository.SlotRepository;
+import com.cukurditeras.backend.web.dto.BookingResponse;
+import com.cukurditeras.backend.web.dto.CreateBookingRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class BookingService {
+
+    private final BookingRepository bookingRepository;
+    private final SlotRepository slotRepository;
+
+    public BookingResponse createBooking(CreateBookingRequest request) {
+        Slot slot = slotRepository.findById(request.slotId()).orElseThrow(() -> new RuntimeException("Slot not found"));
+
+        if (slot.getStatus() != SlotStatus.AVAILABLE) {
+            throw new RuntimeException("Slot not available");
+        }
+
+        boolean slotAlreadyBooked = bookingRepository.existsBySlotId(slot.getId());
+
+        if (slotAlreadyBooked) {
+            throw new RuntimeException("Slot already booked");
+        }
+
+        Booking newBooking = new Booking();
+        newBooking.setSlot(slot);
+        newBooking.setBookingCode(generateBookingCode(slot));
+        newBooking.setStatus(BookingStatus.CONFIRMED);
+        newBooking.setCustomerName(request.customerName());
+        newBooking.setCustomerPhone(request.customerPhone());
+        newBooking.setNotes(request.notes());
+        newBooking.setCreatedAt(OffsetDateTime.now());
+
+        Booking savedBooking = bookingRepository.save(newBooking);
+
+        return new BookingResponse(
+                savedBooking.getId(),
+                savedBooking.getBookingCode(),
+                savedBooking.getCustomerName(),
+                savedBooking.getCustomerPhone(),
+                savedBooking.getCreatedAt(),
+                savedBooking.getStatus()
+        );
+    }
+
+    private String generateBookingCode(Slot slot){
+        String availableSlotDate = slot.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String availableSlotTime = slot.getStartTime().format(DateTimeFormatter.ofPattern("HHmm"));
+        return "CDT" + "/" + availableSlotDate + "/" + availableSlotTime;
+    }
+}
