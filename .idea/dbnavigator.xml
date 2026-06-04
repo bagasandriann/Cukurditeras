@@ -18,7 +18,7 @@ VALUES ('Bagas Barber', 'bagas@example.com', 'dummy-password', '081234567890');
 
 SELECT * FROM "public".booking;
 
-SELECT id, status FROM "public".slot;
+SELECT * FROM "public".capster;
 
 INSERT INTO "public".slot (capster_id, date, start_time, end_time, status, notes)
 VALUES (

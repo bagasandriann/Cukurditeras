@@ -1,4 +1,4 @@
-package com.cukurditeras.backend.web;
+package com.cukurditeras.backend.web.controller;
 
 import com.cukurditeras.backend.service.SlotQueryService;
 import com.cukurditeras.backend.web.dto.response.AvailableSlotResponse;

@@ -21,7 +21,7 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final SlotRepository slotRepository;
     @Transactional
-    public BookingResponse createBooking(CreateBookingRequest request) {
+    public BookingResponse createNewBooking(CreateBookingRequest request) {
         Slot slot = slotRepository.findById(request.slotId()).orElseThrow(() -> new RuntimeException("Slot not found"));
 
         if (slot.getStatus() != SlotStatus.AVAILABLE) {

@@ -20,7 +20,7 @@ public class SlotCommandService {
     private final CapsterRepository capsterRepository;
 
     @Transactional
-    public SlotResponse openSlot(CreateSlotRequest request) {
+    public SlotResponse creteNewSlot(CreateSlotRequest request) {
         // TODO: nanti diganti dengan capster yang login
         Capster capster = capsterRepository.findById(request.capsterId()).orElseThrow(() -> new RuntimeException("Capster not found"));
 
@@ -33,7 +33,7 @@ public class SlotCommandService {
         }
 
         boolean slotArleadyExist = slotRepository.existsByCapsterIdAndDateAndStartTime(capster.getId(), request.date(), request.startTime());
-        
+
         if (slotArleadyExist){
             throw new RuntimeException("Slot already exist");
         }

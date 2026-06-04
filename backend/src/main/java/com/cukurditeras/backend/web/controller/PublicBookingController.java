@@ -1,4 +1,4 @@
-package com.cukurditeras.backend.web;
+package com.cukurditeras.backend.web.controller;
 
 import com.cukurditeras.backend.service.BookingService;
 import com.cukurditeras.backend.web.dto.response.BookingResponse;
@@ -19,6 +19,6 @@ public class PublicBookingController {
 
     @PostMapping
     public BookingResponse createBooking(@Valid @RequestBody CreateBookingRequest request){
-        return bookingService.createBooking(request);
+        return bookingService.createNewBooking(request);
     }
 }

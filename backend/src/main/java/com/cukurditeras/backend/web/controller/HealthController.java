@@ -1,4 +1,4 @@
-package com.cukurditeras.backend.web;
+package com.cukurditeras.backend.web.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

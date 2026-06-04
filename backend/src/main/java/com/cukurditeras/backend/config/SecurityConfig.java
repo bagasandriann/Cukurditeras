@@ -15,7 +15,8 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/health", "/api/public/**", "/error").permitAll()
+                        //TODO: /api/admin/** dihapus agar tidak bisa diakses dari luar
+                        .requestMatchers("/api/health", "/api/public/**", "/api/admin/**", "/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form.disable())
