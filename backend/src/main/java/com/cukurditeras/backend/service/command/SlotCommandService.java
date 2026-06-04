@@ -1,4 +1,4 @@
-package com.cukurditeras.backend.service;
+package com.cukurditeras.backend.service.command;
 
 import com.cukurditeras.backend.domain.entity.Capster;
 import com.cukurditeras.backend.domain.entity.Slot;

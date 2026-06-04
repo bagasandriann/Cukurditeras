@@ -1,4 +1,4 @@
-package com.cukurditeras.backend.service;
+package com.cukurditeras.backend.service.query;
 
 import com.cukurditeras.backend.domain.entity.Slot;
 import com.cukurditeras.backend.domain.enums.SlotStatus;

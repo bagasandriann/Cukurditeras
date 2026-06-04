@@ -1,27 +1,24 @@
 package com.cukurditeras.backend.web.controller;
 
-import com.cukurditeras.backend.service.BookingService;
-import com.cukurditeras.backend.web.dto.response.AvailableSlotResponse;
+import com.cukurditeras.backend.service.command.BookingCommandService;
+import com.cukurditeras.backend.service.query.BookingQueryService;
 import com.cukurditeras.backend.web.dto.response.BookingResponse;
 import com.cukurditeras.backend.web.dto.request.CreateBookingRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/public/bookings")
 @RequiredArgsConstructor
 public class PublicBookingController {
 
-    private final BookingService bookingService;
+    private final BookingCommandService bookingCommandService;
+    private final BookingQueryService bookingQueryService;
 
     @PostMapping
     public BookingResponse createBooking(@Valid @RequestBody CreateBookingRequest request) {
-        return bookingService.createNewBooking(request);
+        return bookingCommandService.createNewBooking(request);
     }
 
     @GetMapping("/booking-code")
@@ -29,7 +26,7 @@ public class PublicBookingController {
             @RequestParam
             String bookingCode
     ) {
-        return bookingService.findByBookingCode(bookingCode);
+        return bookingQueryService.findByBookingCode(bookingCode);
     }
 
     @PostMapping("/{bookingCode}/cancel")
@@ -39,6 +36,6 @@ public class PublicBookingController {
             @RequestParam
             String notes
     ) {
-        return bookingService.cancelBooking(bookingCode, notes);
+        return bookingCommandService.cancelBooking(bookingCode, notes);
     }
 }

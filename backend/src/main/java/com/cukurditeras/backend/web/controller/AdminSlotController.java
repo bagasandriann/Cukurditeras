@@ -1,6 +1,6 @@
 package com.cukurditeras.backend.web.controller;
 
-import com.cukurditeras.backend.service.SlotCommandService;
+import com.cukurditeras.backend.service.command.SlotCommandService;
 import com.cukurditeras.backend.web.dto.request.CreateSlotRequest;
 import com.cukurditeras.backend.web.dto.response.SlotResponse;
 import jakarta.validation.Valid;

@@ -1,4 +1,4 @@
-package com.cukurditeras.backend.service;
+package com.cukurditeras.backend.service.command;
 
 import com.cukurditeras.backend.domain.entity.Booking;
 import com.cukurditeras.backend.domain.entity.Slot;
@@ -19,7 +19,7 @@ import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
-public class BookingService {
+public class BookingCommandService {
 
     private final BookingRepository bookingRepository;
     private final SlotRepository slotRepository;
@@ -50,14 +50,6 @@ public class BookingService {
         Booking savedBooking = bookingRepository.save(newBooking);
 
         return toBookingResponse(savedBooking);
-    }
-
-    @Transactional
-    public BookingResponse findByBookingCode(String bookingCode) {
-        Booking booking = bookingRepository.findByBookingCode(bookingCode)
-                .orElseThrow(() -> new RuntimeException("Booking slot not found"));
-
-        return toBookingResponse(booking);
     }
 
     @Transactional
