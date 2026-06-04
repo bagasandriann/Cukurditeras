@@ -1,4 +1,4 @@
-package com.cukurditeras.backend.web.dto;
+package com.cukurditeras.backend.web.dto.response;
 
 import com.cukurditeras.backend.domain.enums.BookingStatus;
 

@@ -1,8 +1,8 @@
 package com.cukurditeras.backend.web;
 
 import com.cukurditeras.backend.service.BookingService;
-import com.cukurditeras.backend.web.dto.BookingResponse;
-import com.cukurditeras.backend.web.dto.CreateBookingRequest;
+import com.cukurditeras.backend.web.dto.response.BookingResponse;
+import com.cukurditeras.backend.web.dto.request.CreateBookingRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -3,7 +3,7 @@ package com.cukurditeras.backend.service;
 import com.cukurditeras.backend.domain.entity.Slot;
 import com.cukurditeras.backend.domain.enums.SlotStatus;
 import com.cukurditeras.backend.repository.SlotRepository;
-import com.cukurditeras.backend.web.dto.AvailableSlotResponse;
+import com.cukurditeras.backend.web.dto.response.AvailableSlotResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

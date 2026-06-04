@@ -1,7 +1,7 @@
 package com.cukurditeras.backend.web;
 
 import com.cukurditeras.backend.service.SlotQueryService;
-import com.cukurditeras.backend.web.dto.AvailableSlotResponse;
+import com.cukurditeras.backend.web.dto.response.AvailableSlotResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
