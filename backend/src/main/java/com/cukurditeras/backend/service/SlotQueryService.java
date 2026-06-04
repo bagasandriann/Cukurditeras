@@ -25,6 +25,18 @@ public class SlotQueryService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<AvailableSlotResponse> findAvailableSlotsBetween(LocalDate startDate, LocalDate endDate) {
+        if (endDate.isBefore(startDate)) {
+            throw new IllegalArgumentException("End date tidak boleh lebih kecil dari start date");
+        }
+
+        return slotRepository.findByDateBetweenAndStatusOrderByDateAscStartTimeAsc(startDate, endDate, SlotStatus.AVAILABLE)
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
     private AvailableSlotResponse toResponse(Slot slot) {
         return new AvailableSlotResponse(
                 slot.getId(),

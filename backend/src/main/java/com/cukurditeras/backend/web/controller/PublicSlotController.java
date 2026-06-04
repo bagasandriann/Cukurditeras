@@ -28,4 +28,17 @@ public class PublicSlotController {
         LocalDate queryDate = date != null ? date : LocalDate.now();
         return slotQueryService.findAvailableSlots(queryDate);
     }
+
+    @GetMapping("/week")
+    public List<AvailableSlotResponse> getAvailableSlotsInRange(
+            @RequestParam
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate startDate,
+
+            @RequestParam
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate endDate
+    ) {
+        return slotQueryService.findAvailableSlotsBetween(startDate, endDate);
+    }
 }
