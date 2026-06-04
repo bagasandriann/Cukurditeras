@@ -42,7 +42,9 @@ WHERE table_name = 'booking'
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files />
+    <open-files>
+      <object connection-id="bd0e4fcd-1700-4a5d-ad76-8f292884fb80" object-ref="schemas/public/tables/slot" />
+    </open-files>
   </component>
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />

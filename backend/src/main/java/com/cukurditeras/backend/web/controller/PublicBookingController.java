@@ -20,7 +20,7 @@ public class PublicBookingController {
     private final BookingService bookingService;
 
     @PostMapping
-    public BookingResponse createBooking(@Valid @RequestBody CreateBookingRequest request){
+    public BookingResponse createBooking(@Valid @RequestBody CreateBookingRequest request) {
         return bookingService.createNewBooking(request);
     }
 
@@ -30,5 +30,15 @@ public class PublicBookingController {
             String bookingCode
     ) {
         return bookingService.findByBookingCode(bookingCode);
+    }
+
+    @PostMapping("/{bookingCode}/cancel")
+    public BookingResponse cancelBooking(
+            @PathVariable
+            String bookingCode,
+            @RequestParam
+            String notes
+    ) {
+        return bookingService.cancelBooking(bookingCode, notes);
     }
 }
