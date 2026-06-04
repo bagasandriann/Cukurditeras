@@ -71,7 +71,8 @@ public class BookingService {
                 booking.getCustomerName(),
                 booking.getCustomerPhone(),
                 booking.getCreatedAt(),
-                booking.getStatus()
+                booking.getStatus(),
+                booking.getNotes()
         );
     }
 

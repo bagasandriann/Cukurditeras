@@ -11,6 +11,7 @@ public record BookingResponse(
         String customerName,
         String customerPhone,
         OffsetDateTime createdAt,
-        BookingStatus status
+        BookingStatus status,
+        String notes
 ) {
 }
