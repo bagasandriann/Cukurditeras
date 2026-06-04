@@ -1,0 +1,2 @@
+ALTER TABLE booking
+ALTER COLUMN booking_code TYPE VARCHAR(20);

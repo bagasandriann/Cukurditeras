@@ -10,11 +10,9 @@ import com.cukurditeras.backend.web.dto.BookingResponse;
 import com.cukurditeras.backend.web.dto.CreateBookingRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +20,7 @@ public class BookingService {
 
     private final BookingRepository bookingRepository;
     private final SlotRepository slotRepository;
-
+    @Transactional
     public BookingResponse createBooking(CreateBookingRequest request) {
         Slot slot = slotRepository.findById(request.slotId()).orElseThrow(() -> new RuntimeException("Slot not found"));
 
@@ -43,7 +41,7 @@ public class BookingService {
         newBooking.setCustomerName(request.customerName());
         newBooking.setCustomerPhone(request.customerPhone());
         newBooking.setNotes(request.notes());
-        newBooking.setCreatedAt(OffsetDateTime.now());
+        slot.setStatus(SlotStatus.BOOKED);
 
         Booking savedBooking = bookingRepository.save(newBooking);
 
