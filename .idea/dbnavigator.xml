@@ -42,11 +42,9 @@ WHERE table_name = 'booking'
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files />
-  </component>
-  <component name="DBNavigator.Project.DatasetFilterManager">
-    <filter-actions connection-id="bd0e4fcd-1700-4a5d-ad76-8f292884fb80" dataset="public.booking" active-filter-id="" />
-    <filter-actions connection-id="bd0e4fcd-1700-4a5d-ad76-8f292884fb80" dataset="public.slot" active-filter-id="" />
+    <open-files>
+      <object connection-id="bd0e4fcd-1700-4a5d-ad76-8f292884fb80" object-ref="schemas/public/tables/booking" />
+    </open-files>
   </component>
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />
