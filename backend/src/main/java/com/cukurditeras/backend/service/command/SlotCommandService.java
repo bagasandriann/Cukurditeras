@@ -44,7 +44,8 @@ public class SlotCommandService {
         newSlot.setStatus(SlotStatus.AVAILABLE);
         newSlot.setNotes(request.notes());
 
-        Slot savedSlot = slotRepository.save(newSlot);
+        Slot savedSlot = slotRepository
+                .save(newSlot);
 
         return toResponse(savedSlot);
     }
