@@ -22,11 +22,16 @@ public class AdminSlotController {
         return slotCommandService.createNewSlot(request);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{slotId}")
     public SlotResponse updateSlot(
-            @PathVariable UUID id,
+            @PathVariable UUID slotId,
             @Valid @RequestBody UpdateSlotRequest updateSlotRequest
     ){
-        return slotCommandService.updateSlot(id, updateSlotRequest);
+        return slotCommandService.updateSlot(slotId, updateSlotRequest);
+    }
+
+    @PostMapping("/{slotId}/cancel")
+    public SlotResponse cancelSlot(@PathVariable UUID slotId){
+        return slotCommandService.cancelSlot(slotId);
     }
 }

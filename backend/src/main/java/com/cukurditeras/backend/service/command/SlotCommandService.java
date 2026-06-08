@@ -51,8 +51,8 @@ public class SlotCommandService {
 
 
     @Transactional
-    public SlotResponse updateSlot(UUID id, UpdateSlotRequest request) {
-        Slot slot = slotRepository.findById(id).orElseThrow(() -> new RuntimeException("Slot not found"));
+    public SlotResponse updateSlot(UUID slotId, UpdateSlotRequest request) {
+        Slot slot = slotRepository.findById(slotId).orElseThrow(() -> new RuntimeException("Slot not found"));
 
         if (slot.getStatus() == SlotStatus.BOOKED) {
             throw new IllegalArgumentException("You cannot edit a slot that has already been booked");
@@ -79,6 +79,23 @@ public class SlotCommandService {
         slot.setStartTime(request.startTime());
         slot.setEndTime(request.startTime().plusHours(1));
         slot.setNotes(request.notes());
+
+        return toResponse(slot);
+    }
+
+    @Transactional
+    public SlotResponse cancelSlot(UUID slotId){
+        Slot slot = slotRepository.findById(slotId).orElseThrow(() -> new RuntimeException("Slot not found"));
+
+        if (slot.getStatus() == SlotStatus.BOOKED) {
+            throw new IllegalArgumentException("You cannot cancel a slot that has already been booked");
+        }
+
+        if (LocalDateTime.now().isAfter(LocalDateTime.of(slot.getDate(), slot.getStartTime()))) {
+            throw new IllegalArgumentException("You cannot cancel passed slot time");
+        }
+
+        slot.setStatus(SlotStatus.CLOSED);
 
         return toResponse(slot);
     }
