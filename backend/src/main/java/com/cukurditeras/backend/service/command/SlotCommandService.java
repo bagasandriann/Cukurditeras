@@ -6,12 +6,16 @@ import com.cukurditeras.backend.domain.enums.SlotStatus;
 import com.cukurditeras.backend.repository.CapsterRepository;
 import com.cukurditeras.backend.repository.SlotRepository;
 import com.cukurditeras.backend.web.dto.request.CreateSlotRequest;
+import com.cukurditeras.backend.web.dto.request.UpdateSlotRequest;
 import com.cukurditeras.backend.web.dto.response.SlotResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -20,21 +24,15 @@ public class SlotCommandService {
     private final CapsterRepository capsterRepository;
 
     @Transactional
-    public SlotResponse creteNewSlot(CreateSlotRequest request) {
+    public SlotResponse createNewSlot(CreateSlotRequest request) {
         // TODO: nanti diganti dengan capster yang login
         Capster capster = capsterRepository.findById(request.capsterId()).orElseThrow(() -> new RuntimeException("Capster not found"));
 
-        if (request.date().isBefore(LocalDate.now())){
-            throw new IllegalArgumentException("Date tidak bisa lebih kecil dari hari ini");
-        }
+        validateSlotDateAndStartTime(request.date(), request.startTime());
 
-        if (request.startTime().getMinute() != 0) {
-            throw new IllegalArgumentException("Start time harus tepat di jam (menit harus 00)");
-        }
+        boolean slotAlreadyExist = slotRepository.existsByCapsterIdAndDateAndStartTime(capster.getId(), request.date(), request.startTime());
 
-        boolean slotArleadyExist = slotRepository.existsByCapsterIdAndDateAndStartTime(capster.getId(), request.date(), request.startTime());
-
-        if (slotArleadyExist){
+        if (slotAlreadyExist) {
             throw new RuntimeException("Slot already exist");
         }
 
@@ -48,13 +46,61 @@ public class SlotCommandService {
 
         Slot savedSlot = slotRepository.save(newSlot);
 
+        return toResponse(savedSlot);
+    }
+
+
+    @Transactional
+    public SlotResponse updateSlot(UUID id, UpdateSlotRequest request) {
+        Slot slot = slotRepository.findById(id).orElseThrow(() -> new RuntimeException("Slot not found"));
+
+        if (slot.getStatus() == SlotStatus.BOOKED) {
+            throw new IllegalArgumentException("You cannot edit a slot that has already been booked");
+        }
+
+        if (LocalDateTime.now().isAfter(LocalDateTime.of(slot.getDate(), slot.getStartTime()))) {
+            throw new IllegalArgumentException("You cannot edit passed slot time");
+        }
+
+        validateSlotDateAndStartTime(request.date(), request.startTime());
+
+        boolean slotAlreadyExist = slotRepository.existsByCapsterIdAndDateAndStartTimeAndIdNot(
+                slot.getCapster().getId(),
+                request.date(),
+                request.startTime(),
+                slot.getId()
+        );
+
+        if (slotAlreadyExist) {
+            throw new RuntimeException("Slot already exist");
+        }
+
+        slot.setDate(request.date());
+        slot.setStartTime(request.startTime());
+        slot.setEndTime(request.startTime().plusHours(1));
+        slot.setNotes(request.notes());
+
+        return toResponse(slot);
+    }
+
+    private void validateSlotDateAndStartTime(LocalDate date, LocalTime startTime) {
+        if (date.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("The date cannot be earlier than today");
+        }
+
+        if (startTime.getMinute() != 0 || startTime.getSecond() != 0 || startTime.getNano() != 0) {
+            throw new IllegalArgumentException("The start time must be on the hour (the minutes must be 00)");
+        }
+    }
+
+    private SlotResponse toResponse(Slot slot) {
         return new SlotResponse(
-                savedSlot.getId(),
-                savedSlot.getDate(),
-                savedSlot.getStartTime(),
-                savedSlot.getEndTime(),
-                savedSlot.getStatus(),
-                savedSlot.getNotes()
+                slot.getId(),
+                slot.getDate(),
+                slot.getStartTime(),
+                slot.getEndTime(),
+                slot.getStatus(),
+                slot.getNotes()
         );
     }
 }
