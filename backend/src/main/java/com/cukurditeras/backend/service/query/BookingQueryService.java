@@ -47,6 +47,10 @@ public class BookingQueryService {
                 booking.getCustomerPhone(),
                 booking.getCreatedAt(),
                 booking.getStatus(),
+                booking.getSlot().getDate(),
+                booking.getSlot().getStartTime(),
+                booking.getSlot().getEndTime(),
+                booking.getSlot().getCapster().getName(),
                 booking.getNotes()
         );
     }

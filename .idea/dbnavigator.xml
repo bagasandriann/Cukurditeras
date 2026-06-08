@@ -44,6 +44,9 @@ WHERE table_name = 'booking'
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files />
   </component>
+  <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="bd0e4fcd-1700-4a5d-ad76-8f292884fb80" dataset="public.slot" active-filter-id="" />
+  </component>
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />
   </component>
