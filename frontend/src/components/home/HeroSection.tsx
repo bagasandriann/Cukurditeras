@@ -8,7 +8,7 @@ export function HeroSection() {
       id="home"
       className="relative overflow-hidden border-b border-zinc-200 bg-white"
     >
-      <div className="mx-auto grid w-full max-w-6xl items-center gap-4 px-5 pt-5 sm:px-8 sm:pt-8 lg:min-h-[460px] lg:grid-cols-[0.74fr_1.26fr] lg:gap-8 lg:py-14">
+      <div className="mx-auto grid w-full max-w-6xl items-center gap-4 px-5 pt-5 sm:px-8 sm:pt-8 lg:grid-cols-[0.74fr_1.26fr] lg:gap-14 lg:py-0 lg:pt-0">
         <div className="z-10 flex flex-col items-center text-center lg:items-start lg:text-left">
           <p className="mb-4 hidden rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-xs font-bold uppercase tracking-normal text-orange-700 lg:inline-flex">
             Cukur rapi, jadwal pasti
@@ -29,14 +29,14 @@ export function HeroSection() {
           </Link>
         </div>
 
-        <div className="relative -mx-5 mt-2 aspect-[16/7] min-h-36 overflow-hidden sm:-mx-8 sm:aspect-[16/9] sm:min-h-72 lg:absolute lg:inset-y-0 lg:right-0 lg:mx-0 lg:mt-0 lg:h-auto lg:w-[58vw] lg:min-h-0">
+        <div className="relative -mx-5 mt-2 aspect-[16/7] min-h-36 overflow-hidden sm:-mx-8 sm:aspect-[16/9] sm:min-h-72 lg:mx-0 lg:mt-0 lg:aspect-[16/10] lg:min-h-[520px]">
           <Image
             src={heroImage}
             alt="Ilustrasi pelanggan sedang cukur rambut di teras rumah"
             fill
             priority
             sizes="(min-width: 1024px) 58vw, 100vw"
-            className="object-cover object-[72%_center] lg:object-[center_bottom]"
+            className="object-cover object-[72%_center] lg:object-center"
           />
         </div>
       </div>

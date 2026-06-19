@@ -1,4 +1,7 @@
+import { BookingSection } from "@/components/home/BookingSection";
+import { Footer } from "@/components/home/Footer";
 import { HeroSection } from "@/components/home/HeroSection";
+import { TestimonialSection } from "@/components/home/TestimonialSection";
 import { Navbar } from "@/components/layout/Navbar";
 
 export default function Home() {
@@ -7,7 +10,10 @@ export default function Home() {
       <Navbar />
       <main>
         <HeroSection />
+        <BookingSection />
+        <TestimonialSection />
       </main>
+      <Footer />
     </div>
   );
 }

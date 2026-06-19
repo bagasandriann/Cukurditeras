@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import Logo from "@/assets/Logo.jpeg";
+import Logo from "@/assets/Logo.png";
 
 const navItems = [
   { label: "Home", href: "#home" },
@@ -15,25 +15,15 @@ export function Navbar() {
       <nav className="mx-auto flex h-20 w-full max-w-6xl items-center justify-between px-5 sm:px-8">
         <Link
           href="#home"
-          className="flex items-center gap-3 leading-none"
+          className="items-center gap-3 leading-none"
           aria-label="Cukur di Teras"
         >
           <Image
             src={Logo}
             alt=""
-            width={48}
-            height={48}
+            width={135}
             priority
-            className="h-12 w-12 object-cover"
           />
-          <span>
-            <span className="block text-2xl font-black tracking-normal text-zinc-950">
-              Cukur
-            </span>
-            <span className="-mt-1 block text-xl font-black tracking-normal text-orange-600">
-              di Teras
-            </span>
-          </span>
         </Link>
 
         <div className="hidden items-center gap-10 text-sm font-semibold text-zinc-800 md:flex">
