@@ -37,14 +37,14 @@ export function TestimonialSection() {
                 <div>
                   <h3 className="font-black text-zinc-950">{item.name}</h3>
                   <p className="mt-1 text-sm font-black text-orange-500">
-                    ★★★★★
+                    5/5
                   </p>
                 </div>
               </div>
 
               <p className="mt-4 text-sm leading-6 text-zinc-700">
                 <span className="mr-2 text-3xl font-black leading-none text-orange-600">
-                  “
+                  &quot;
                 </span>
                 {item.text}
               </p>

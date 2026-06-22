@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Logo from "@/assets/Logo.png";
+import Logo from "@/shared/assets/Logo.png";
 
 const footerItems = [
   {
@@ -18,18 +18,16 @@ const footerItems = [
 
 export function Footer() {
   return (
-    <footer id="lokasi" className="border-t border-zinc-200 bg-white px-4 py-8 sm:px-8">
+    <footer
+      id="lokasi"
+      className="border-t border-zinc-200 bg-white px-4 py-8 sm:px-8"
+    >
       <div className="mx-auto grid w-full max-w-6xl gap-8 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1fr]">
         <div>
-          <div className="flex items-center gap-3">
-            <Image
-              src={Logo}
-              alt=""
-              width={150}
-            />
-            <div className="leading-none">
-            </div>
-          </div>
+          <Image src={Logo} alt="Cukur di Teras" width={150} />
+          <p className="mt-4 max-w-xs text-sm leading-6 text-zinc-600">
+            Cukur nyaman di rumah, tanpa antre lama.
+          </p>
         </div>
 
         {footerItems.map((item) => (
@@ -45,7 +43,7 @@ export function Footer() {
       </div>
 
       <p className="mx-auto mt-8 w-full max-w-6xl border-t border-zinc-200 pt-5 text-center text-xs text-zinc-500">
-        © 2026 Cukur di Teras. All rights reserved.
+        (c) 2026 Cukur di Teras. All rights reserved.
       </p>
     </footer>
   );

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import Logo from "@/assets/Logo.png";
+import Logo from "@/shared/assets/Logo.png";
 
 const navItems = [
   { label: "Home", href: "#home" },

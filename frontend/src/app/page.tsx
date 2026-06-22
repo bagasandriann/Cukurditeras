@@ -1,8 +1,8 @@
-import { BookingSection } from "@/components/home/BookingSection";
-import { Footer } from "@/components/home/Footer";
-import { HeroSection } from "@/components/home/HeroSection";
-import { TestimonialSection } from "@/components/home/TestimonialSection";
-import { Navbar } from "@/components/layout/Navbar";
+import { BookingSection } from "@/features/home/components/BookingSection";
+import { Footer } from "@/features/home/components/Footer";
+import { HeroSection } from "@/features/home/components/HeroSection";
+import { TestimonialSection } from "@/features/home/components/TestimonialSection";
+import { Navbar } from "@/shared/components/layout/Navbar";
 
 export default function Home() {
   return (

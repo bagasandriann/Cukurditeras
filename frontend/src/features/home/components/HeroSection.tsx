@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import heroImage from "@/assets/hero_section_bg.png";
+import heroImage from "@/shared/assets/hero-section-bg.png";
 
 export function HeroSection() {
   return (
