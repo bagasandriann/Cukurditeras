@@ -43,12 +43,12 @@ export default function LoginCapsterPage() {
             />
           </label>
 
-          <button
+          <Link
+            href="/capster/dashboard"
             className="inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-orange-600 px-6 text-base font-black text-white shadow-sm transition-colors hover:bg-orange-700"
-            type="button"
           >
             Masuk
-          </button>
+          </Link>
         </form>
 
         <Link
