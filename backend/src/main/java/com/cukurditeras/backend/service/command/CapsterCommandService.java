@@ -40,17 +40,17 @@ public class CapsterCommandService {
     }
 
     @Transactional(readOnly = true)
-    public CapsterResponse capsterLogin(CapsterLoginRequest capsterLoginRequest) {
+    public Capster loginAndGetCapster(CapsterLoginRequest capsterLoginRequest) {
         Capster capster = capsterRepository.findByEmail(capsterLoginRequest.email()).orElseThrow(() -> new RuntimeException("Capster not found"));
 
         if (!passwordEncoder.matches(capsterLoginRequest.password(), capster.getPasswordHash())) {
             throw new IllegalArgumentException("Wrong capster password");
         }
 
-        return toCapsterResponse(capster);
+        return capster;
     }
 
-    private CapsterResponse toCapsterResponse(Capster capster) {
+    public CapsterResponse toCapsterResponse(Capster capster) {
         return new CapsterResponse(
                 capster.getId(),
                 capster.getName(),
