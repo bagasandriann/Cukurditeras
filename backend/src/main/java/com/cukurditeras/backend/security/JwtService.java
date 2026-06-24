@@ -1,6 +1,7 @@
 package com.cukurditeras.backend.security;
 
 import com.cukurditeras.backend.domain.entity.Capster;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +24,7 @@ public class JwtService {
         Date now = new Date();
         Date expiration = new Date(now.getTime() + expirationMinutes * 60 * 1000);
 
-        SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+        SecretKey key = getSigningKey();
 
         return Jwts.builder()
                 .subject(capster.getId().toString())
@@ -33,5 +34,21 @@ public class JwtService {
                 .expiration(expiration)
                 .signWith(key)
                 .compact();
+    }
+
+    public SecretKey getSigningKey(){
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public Claims extractClaims(String token){
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+    public String extractCapsterId(String token){
+        return extractClaims(token).getSubject();
     }
 }
