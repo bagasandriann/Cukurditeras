@@ -1,8 +1,28 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/shared/assets/Logo.png";
+import { useRouter } from "next/navigation";
 
 export default function LoginCapsterPage() {
+  const router = useRouter();
+
+  async function handleLogin() {
+    const email = document.getElementById("email") as HTMLInputElement;
+    const password = document.getElementById("password") as HTMLInputElement;
+
+    if (!email.value || !password.value) {
+      alert("Email dan password harus diisi.");
+      return;
+    }
+
+    console.log("Email:", email.value);
+    console.log("Password:", password.value);
+
+    router.push("/capster/dashboard");
+  }
+
   return (
     <main className="flex min-h-screen items-center justify-center bg-white px-4 py-10 text-zinc-950">
       <section className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-6 shadow-[0_20px_70px_rgba(24,24,27,0.06)]">
@@ -26,29 +46,32 @@ export default function LoginCapsterPage() {
 
         <form className="mt-6 space-y-4">
           <label className="block">
-            <span className="text-sm font-bold text-zinc-950">Username</span>
+            <span className="text-sm font-bold text-zinc-950">Email</span>
             <input
+              id="email"
               className="mt-2 h-12 w-full rounded-lg border border-zinc-300 px-4 text-sm outline-none transition-colors placeholder:text-zinc-400 focus:border-orange-600"
-              placeholder="Masukkan username"
-              type="text"
+              placeholder="Masukkan email"
+              type="email"
             />
           </label>
 
           <label className="block">
             <span className="text-sm font-bold text-zinc-950">Password</span>
             <input
+              id="password"
               className="mt-2 h-12 w-full rounded-lg border border-zinc-300 px-4 text-sm outline-none transition-colors placeholder:text-zinc-400 focus:border-orange-600"
               placeholder="Masukkan password"
               type="password"
             />
           </label>
 
-          <Link
-            href="/capster/dashboard"
+          <button
+            type="button"
+            onClick={handleLogin}
             className="inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-orange-600 px-6 text-base font-black text-white shadow-sm transition-colors hover:bg-orange-700"
           >
             Masuk
-          </Link>
+          </button>
         </form>
 
         <Link
