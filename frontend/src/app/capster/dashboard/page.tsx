@@ -3,8 +3,21 @@
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/shared/assets/Logo.png";
+import { useEffect, useMemo, useState } from "react";
 
-const days = [
+type SlotStatus = "AVAILABLE" | "BOOKED" | "CLOSED";
+
+type Slot = {
+  id: string;
+  status: SlotStatus;
+  date: string;
+  startTime: string;
+  endTime: string;
+  capsterName: string;
+  notes: string | null;
+};
+
+const dayNames = [
   { short: "Sen", full: "Senin" },
   { short: "Sel", full: "Selasa" },
   { short: "Rab", full: "Rabu" },
@@ -18,24 +31,6 @@ const hours = Array.from(
   { length: 24 },
   (_, index) => `${String(index).padStart(2, "0")}:00`,
 );
-
-const availableSlots: Record<string, number[]> = {
-  Sen: [9, 10, 11, 13, 14, 16, 19],
-  Sel: [9, 10, 11, 13, 14, 15, 16],
-  Rab: [10, 11, 13, 14, 15],
-  Kam: [9, 10, 11, 12, 14, 15, 16, 19],
-  Jum: [9, 10, 13, 14, 16, 17, 19],
-  Sab: [8, 9, 10, 11, 13, 14],
-  Min: [9, 10, 11],
-};
-
-const bookedSlots: Record<string, number[]> = {
-  Sen: [9, 13],
-  Sel: [10],
-  Kam: [19],
-  Jum: [14],
-  Sab: [9],
-};
 
 const bookings = [
   {
@@ -70,12 +65,67 @@ const legends = [
   { label: "Closed", className: "bg-zinc-200" },
 ];
 
-function getSlotStatus(day: string, hour: number) {
-  if (bookedSlots[day]?.includes(hour)) {
+// Keep date formatting in local time so the API range does not shift because of UTC conversion.
+function formatLocalDate(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
+// Dashboard weeks start on Monday. JavaScript uses 0 for Sunday, so Sunday moves back 6 days.
+function getStartOfWeek(date: Date) {
+  const result = new Date(date);
+  const day = result.getDay();
+  const diff = day === 0 ? -6 : 1 - day;
+
+  result.setDate(result.getDate() + diff);
+  result.setHours(0, 0, 0, 0);
+
+  return result;
+}
+
+// Build the rows shown in the schedule grid and attach the API date for each day.
+function buildWeekDays(startDate: Date) {
+  return dayNames.map((day, index) => {
+    const date = new Date(startDate);
+    date.setDate(startDate.getDate() + index);
+
+    return {
+      ...day,
+      date: formatLocalDate(date),
+    };
+  });
+}
+
+// Human-readable label for the currently loaded weekly range.
+function formatRangeLabel(startDate: Date, endDate: Date) {
+  const monthFormatter = new Intl.DateTimeFormat("id-ID", {
+    month: "long",
+    year: "numeric",
+  });
+
+  return `${startDate.getDate()} - ${endDate.getDate()} ${monthFormatter.format(endDate)}`;
+}
+
+// Match one grid cell to a backend slot. Missing slot data means that hour is closed.
+function getSlotStatus(slots: Slot[], date: string, hour: number) {
+  const hourText = `${String(hour).padStart(2, "0")}:00:00`;
+
+  const slot = slots.find(
+    (item) => item.date === date && item.startTime === hourText,
+  );
+
+  if (!slot) {
+    return "closed";
+  }
+
+  if (slot.status === "BOOKED") {
     return "booked";
   }
 
-  if (availableSlots[day]?.includes(hour)) {
+  if (slot.status === "AVAILABLE") {
     return "available";
   }
 
@@ -174,6 +224,43 @@ function CapsterNavbar() {
 }
 
 export default function CapsterDashboardPage() {
+  const [slots, setSlots] = useState<Slot[]>([]);
+
+  // The week range is calculated once when the dashboard opens.
+  const weekStartDate = useMemo(() => getStartOfWeek(new Date()), []);
+  const weekEndDate = useMemo(() => {
+    const endDate = new Date(weekStartDate);
+    endDate.setDate(weekStartDate.getDate() + 6);
+
+    return endDate;
+  }, [weekStartDate]);
+  const weekDays = useMemo(() => buildWeekDays(weekStartDate), [weekStartDate]);
+  const weekStart = formatLocalDate(weekStartDate);
+  const weekEnd = formatLocalDate(weekEndDate);
+  const weekRangeLabel = formatRangeLabel(weekStartDate, weekEndDate);
+
+  useEffect(() => {
+    async function fetchSlots() {
+      // credentials: "include" sends the HttpOnly auth cookie created during capster login.
+      const response = await fetch(
+        `http://localhost:8080/api/admin/slots/week?startDate=${weekStart}&endDate=${weekEnd}`,
+        {
+          credentials: "include",
+        },
+      );
+
+      if (!response.ok) {
+        console.error("Gagal mengambil data slot");
+        return;
+      }
+
+      const data = await response.json();
+      setSlots(data);
+    }
+
+    fetchSlots();
+  }, [weekEnd, weekStart]);
+
   return (
     <div className="min-h-screen bg-zinc-50 text-zinc-950">
       <CapsterNavbar />
@@ -188,21 +275,16 @@ export default function CapsterDashboardPage() {
               Dashboard Capster
             </h1>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-600">
-              Kelola template jadwal mingguan dengan slot tetap 1 jam, lalu
-              pantau booking yang masuk.
+              Tempat untuk mengelola jadwal dan melihat booking pelanggan.
             </p>
           </div>
 
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-            <button
-              type="button"
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-zinc-300 bg-white px-4 text-sm font-black text-zinc-800 transition-colors hover:border-orange-300 hover:text-orange-700"
-            >
-              <CalendarIcon />
-              Minggu Ini
-            </button>
             <div className="inline-flex min-h-11 items-center justify-center rounded-lg border border-zinc-200 bg-white px-4 text-sm font-bold text-zinc-600">
-              22 - 28 Juni 2026
+              <div className="mr-2 flex items-center justify-center">
+                <CalendarIcon />
+              </div>
+              {weekRangeLabel}
             </div>
             <button
               type="button"
@@ -255,7 +337,7 @@ export default function CapsterDashboardPage() {
                     </div>
                   ))}
 
-                  {days.map((day) => (
+                  {weekDays.map((day) => (
                     <div key={day.short} className="contents">
                       <div className="flex h-11 items-center rounded-lg bg-zinc-50 px-3 text-sm font-black text-zinc-800">
                         <span className="sm:hidden">{day.short}</span>
@@ -263,7 +345,7 @@ export default function CapsterDashboardPage() {
                       </div>
 
                       {hours.map((hourLabel, hour) => {
-                        const status = getSlotStatus(day.short, hour);
+                        const status = getSlotStatus(slots, day.date, hour);
 
                         return (
                           <button
@@ -297,7 +379,7 @@ export default function CapsterDashboardPage() {
                 Jadwal Booking
               </h2>
               <p className="mt-1 text-sm leading-6 text-zinc-600">
-                Booking aktif dari pelanggan tanpa login.
+                Booking aktif pelanggan.
               </p>
 
               <div className="mt-4 grid grid-cols-2 rounded-lg border border-zinc-200 bg-zinc-50 p-1">
