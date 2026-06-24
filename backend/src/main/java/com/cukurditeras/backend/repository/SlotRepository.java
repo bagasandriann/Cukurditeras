@@ -11,6 +11,7 @@ import java.util.UUID;
 
 public interface SlotRepository extends JpaRepository<Slot, UUID> {
     List<Slot> findByDateAndStatusOrderByStartTimeAsc(LocalDate date, SlotStatus status);
+    List<Slot> findByDateBetweenOrderByDateAscStartTimeAsc(LocalDate startDate, LocalDate endDate);
     List<Slot> findByDateBetweenAndStatusOrderByDateAscStartTimeAsc(LocalDate startDate, LocalDate endDate, SlotStatus status);
     boolean existsByCapsterIdAndDateAndStartTime(UUID capsterId, LocalDate date, LocalTime startTime);
     boolean existsByCapsterIdAndDateAndStartTimeAndIdNot(UUID capsterId, LocalDate date, LocalTime startTime, UUID id);
