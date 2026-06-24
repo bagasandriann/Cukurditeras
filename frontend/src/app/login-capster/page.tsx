@@ -17,10 +17,25 @@ export default function LoginCapsterPage() {
       return;
     }
 
-    console.log("Email:", email.value);
-    console.log("Password:", password.value);
+    const response = await fetch("http://localhost:8080/api/auth/login", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email.value,
+        password: password.value,
+      }),
+    });
 
-    router.push("/capster/dashboard");
+    if (response.ok) {
+      const data = await response.json();
+      console.log("Login successful:", data);
+      router.push("/capster/dashboard");
+    } else {
+      alert("Email atau password salah.");
+    }
   }
 
   return (

@@ -60,4 +60,17 @@ public class AuthController {
     ){
         return capsterCommandService.capsterRegister(capsterRegisterRequest);
     }
+
+    @PostMapping("/logout")
+    public void logoutCapster(HttpServletResponse response){
+        ResponseCookie cookie = ResponseCookie.from(jwtCookieName, "")
+                .httpOnly(true)
+                .secure(false)
+                .sameSite("Lax")
+                .path("/")
+                .maxAge(0)
+                .build();
+
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+    }
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/shared/assets/Logo.png";
@@ -12,8 +14,9 @@ const days = [
   { short: "Min", full: "Minggu" },
 ];
 
-const hours = Array.from({ length: 24 }, (_, index) =>
-  `${String(index).padStart(2, "0")}:00`,
+const hours = Array.from(
+  { length: 24 },
+  (_, index) => `${String(index).padStart(2, "0")}:00`,
 );
 
 const availableSlots: Record<string, number[]> = {
@@ -129,20 +132,42 @@ function CalendarIcon() {
   );
 }
 
+async function handleLogout() {
+  try {
+    const response = await fetch("http://localhost:8080/api/auth/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+
+    if (response.ok) {
+      globalThis.location.href = "/login-capster";
+    } else {
+      console.error("Logout failed");
+    }
+  } catch (error) {
+    console.error("Error occurred while logging out:", error);
+  }
+}
+
 function CapsterNavbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-zinc-200/80 bg-white/95 backdrop-blur">
       <nav className="mx-auto flex h-20 w-full max-w-6xl items-center justify-between px-5 sm:h-24 sm:px-8">
-        <Link href="/" className="inline-flex items-center" aria-label="Cukur di Teras">
+        <Link
+          href="/"
+          className="inline-flex items-center"
+          aria-label="Cukur di Teras"
+        >
           <Image src={Logo} alt="Cukur di Teras" width={135} priority />
         </Link>
 
-        <Link
-          href="/login-capster"
+        <button
+          type="button"
+          onClick={handleLogout}
           className="inline-flex min-h-11 items-center justify-center rounded-lg bg-orange-600 px-5 text-sm font-black text-white shadow-sm transition-colors hover:bg-orange-700"
         >
           Logout
-        </Link>
+        </button>
       </nav>
     </header>
   );
@@ -163,7 +188,8 @@ export default function CapsterDashboardPage() {
               Dashboard Capster
             </h1>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-600">
-              Kelola template jadwal mingguan dengan slot tetap 1 jam, lalu pantau booking yang masuk.
+              Kelola template jadwal mingguan dengan slot tetap 1 jam, lalu
+              pantau booking yang masuk.
             </p>
           </div>
 
@@ -196,14 +222,20 @@ export default function CapsterDashboardPage() {
                   Template Jadwal Mingguan
                 </h2>
                 <p className="mt-1 text-sm leading-6 text-zinc-600">
-                  Pilih blok jam yang ingin dibuka. Setiap blok otomatis berdurasi 1 jam.
+                  Pilih blok jam yang ingin dibuka. Setiap blok otomatis
+                  berdurasi 1 jam.
                 </p>
               </div>
 
               <div className="flex flex-wrap gap-3 text-xs font-bold text-zinc-600">
                 {legends.map((legend) => (
-                  <span key={legend.label} className="inline-flex items-center gap-2">
-                    <span className={`h-3 w-3 rounded-sm ${legend.className}`} />
+                  <span
+                    key={legend.label}
+                    className="inline-flex items-center gap-2"
+                  >
+                    <span
+                      className={`h-3 w-3 rounded-sm ${legend.className}`}
+                    />
                     {legend.label}
                   </span>
                 ))}
@@ -244,7 +276,11 @@ export default function CapsterDashboardPage() {
                             aria-label={`${day.full} ${hourLabel} ${status}`}
                             title={`${day.full} ${hourLabel} ${status}`}
                           >
-                            {status === "booked" ? "B" : status === "available" ? "A" : ""}
+                            {status === "booked"
+                              ? "B"
+                              : status === "available"
+                                ? "A"
+                                : ""}
                           </button>
                         );
                       })}
@@ -282,7 +318,10 @@ export default function CapsterDashboardPage() {
 
             <div className="divide-y divide-zinc-200 lg:min-h-0 lg:flex-1 lg:overflow-y-auto">
               {bookings.map((booking) => (
-                <article key={booking.code} className="p-4 transition-colors hover:bg-zinc-50 sm:p-5">
+                <article
+                  key={booking.code}
+                  className="p-4 transition-colors hover:bg-zinc-50 sm:p-5"
+                >
                   <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0">
                       <p className="text-xl font-black leading-none text-orange-600">
@@ -291,7 +330,9 @@ export default function CapsterDashboardPage() {
                       <h3 className="mt-3 truncate text-base font-black text-zinc-950">
                         {booking.name}
                       </h3>
-                      <p className="mt-1 text-sm text-zinc-600">{booking.phone}</p>
+                      <p className="mt-1 text-sm text-zinc-600">
+                        {booking.phone}
+                      </p>
                     </div>
                     <span className="rounded-lg bg-emerald-50 px-3 py-1 text-[11px] font-black text-emerald-700">
                       CONFIRMED
@@ -299,8 +340,12 @@ export default function CapsterDashboardPage() {
                   </div>
 
                   <div className="mt-4 flex items-center justify-between gap-3 rounded-lg bg-zinc-50 px-3 py-2">
-                    <span className="text-xs font-bold text-zinc-500">Kode Booking</span>
-                    <span className="text-sm font-black text-zinc-950">{booking.code}</span>
+                    <span className="text-xs font-bold text-zinc-500">
+                      Kode Booking
+                    </span>
+                    <span className="text-sm font-black text-zinc-950">
+                      {booking.code}
+                    </span>
                   </div>
                 </article>
               ))}
